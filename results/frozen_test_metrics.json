@@ -22,6 +22,24 @@
     "beta": {"log_loss": 0.5920529143, "auroc": 0.6531996585},
     "robust_platt": {"log_loss": 0.5914355097, "auroc": 0.6531996585}
   },
+  "functional_routing_controls": {
+    "muon_lora_adamw_head_released_benchmark": {
+      "candidate_robust_platt": {"log_loss": 0.5944556283, "auroc": 0.6477985632},
+      "adamw_baseline_robust_platt": {"log_loss": 0.5938825240, "auroc": 0.6500211437}
+    },
+    "adamw_lora_muon_head_untouched_development": {
+      "candidate_beta": {"log_loss": 0.545988, "auroc": 0.717540},
+      "adamw_baseline_beta": {"log_loss": 0.541474, "auroc": 0.725394},
+      "paired_session_bootstrap_log_loss_gain_mean": -0.004508,
+      "paired_session_bootstrap_log_loss_gain_ci95": [-0.006976, -0.002084]
+    }
+  },
+  "completed_two_branch_system": {
+    "composition": "0.40 AdamW Layer-28 XGBoost beta + 0.60 Muon LR2e-5 classification-head beta",
+    "log_loss": 0.590509,
+    "auroc": 0.657425,
+    "evaluation": "released_labeled_benchmark"
+  },
   "paired_session_bootstrap": {
     "repeats": 2000,
     "robust_platt_log_loss_gain_mean": 0.0024412617,
