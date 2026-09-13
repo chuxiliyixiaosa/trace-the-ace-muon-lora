@@ -1,7 +1,14 @@
 # Matrix-Aware LoRA Optimization for Calibrated Tutoring Assessment
 
-**Officially fourth on the private leaderboard; completed research system: 0.590509 Log
-Loss / 0.657425 AUROC on the released labeled benchmark.**
+**Officially fourth. Our central contribution is an audited Muon-LoRA recipe that assigns
+all 505 trainable matrices to Muon with zero fallback.**
+
+![From dialogue evidence to calibrated probability](figures/muon-lora-hero.png)
+
+*Figure 1. From dialogue evidence to calibrated probability. Muon reshapes the optimization
+geometry of all 505 trainable LoRA and classification matrices; the resulting representation
+provides both a stronger standalone prediction and complementary errors for the calibrated
+two-branch system.*
 
 ## 1. Summary
 
@@ -12,27 +19,34 @@ representation, and separates semantic encoding from nonlinear probability estim
 calibration. All model selection used session-disjoint splits; calibration was cross-fitted
 by session and uncertainty was estimated by resampling sessions rather than rows.
 
-We officially finished fourth on the private leaderboard. We then completed a matrix-aware
-LoRA optimization framework whose strongest two-branch system reached **0.590509 Log Loss
-and 0.657425 AUROC** on the released labeled benchmark. This numerical pair is stronger
-than every displayed leaderboard row, although it is not an official private leaderboard
-result. More importantly, it is supported by a reproducible Muon-LoRA recipe,
-optimizer-routing controls, grouped validation, and an optimizer-diverse probability
-ensemble.
+We officially ranked fourth with **0.59449 Log Loss and 0.64985 AUROC** on the private
+leaderboard. Our central technical contribution is a fully audited Muon-LoRA recipe for
+long-context outcome classification: all 505 trainable matrices were optimized by Muon with
+zero AdamW fallback. This reduced frozen single-model Log Loss from **0.593883 to 0.591436**;
+a paired session-bootstrap estimated a mean gain of 0.002441 with 95% interval
+**[0.000650, 0.004234]**. A subsequently completed two-branch research system reached
+**0.590509 / 0.657425** on the released labeled benchmark. This numerical pair is stronger
+than every displayed leaderboard row, but it is not an official private leaderboard result.
 
 Our work makes three contributions:
 
-1. A leakage-resistant probability pipeline combining session-disjoint validation,
-   Qwen3-4B representations, a five-model XGBoost head, and grouped beta calibration.
-2. Matrix-aware Muon-LoRA optimization applied to all **505** trainable matrices with
-   **zero AdamW fallbacks**, together with an optimizer-specific learning rate study.
-3. Opposite optimizer-routing controls and heterogeneous ensembling that connect Muon to
-   representation and error diversity rather than treating it as an incidental optimizer
-   swap.
+1. **Audited Muon-LoRA.** We transfer matrix-orthogonalized optimization to every LoRA
+   factor and the classification matrix, then verify the realized assignment at runtime:
+   505 Muon matrices and zero fallbacks.
+2. **Mechanistic evidence.** A narrow learning rate optimum, improvements before
+   ensembling, and two opposite optimizer-routing controls show that the gain depends on
+   coordinated representation and head optimization.
+3. **Calibrated heterogeneous prediction.** Session-disjoint validation, five-model
+   hidden-state XGBoost, grouped beta calibration, and optimizer-diverse fusion jointly
+   optimize Log Loss while preserving a practical inference path.
 
 ![System architecture](figures/system_architecture.png)
 
-The competition-time XGBoost system used Qwen3-4B's final valid-token hidden state, five
+*Figure 2. The competition path used final-token XGBoost and grouped beta calibration. The
+completed research system combines an AdamW Layer-28 XGBoost branch with an audited
+Muon-LoRA classification branch.*
+
+The competition-time XGBoost system used Qwen3-4B's final valid-token hidden-state vector, five
 regularized XGBoost models, and cross-fitted beta calibration. It improved public/A Log
 Loss from 0.6000 to **0.5966** while retaining 0.6464 AUROC. Our best retained probability
 file was a distinct submission: it scored 0.59663 / 0.64465 on public/A and ultimately
@@ -55,6 +69,10 @@ calibration before any new model was added: frozen robust Platt Log Loss fell fr
 **0.593883 to 0.591436**, raw Log Loss fell from **0.623250 to 0.616465**, and AUROC rose
 from **0.650021 to 0.653200**. The single-model system still uses one Qwen forward pass and a
 linear classification head at inference.
+
+> **Primary finding.** Muon-LoRA improved the frozen single-model endpoint from 0.593883 /
+> 0.650021 to 0.591436 / 0.653200. The paired session-bootstrap supports a positive Log Loss
+> gain. This result requires neither XGBoost nor model fusion.
 
 We do not claim to have invented Muon for low-rank adaptation. Recent work confirms that
 LoRA's factorization creates a genuine geometric ambiguity and motivates specialized
@@ -157,10 +175,11 @@ sessions estimated a mean gain of 0.002441 with 95% interval [0.000650, 0.004234
 endpoint improved from 0.623250 to 0.616465 as well, making a post-processing-only
 explanation unlikely. This single-model evidence precedes and motivates the ensemble.
 
-This comparison establishes a useful recipe, not a pure causal estimate of optimizer
-identity: AdamW and Muon use their selected learning rates, and we do not have matched
-AdamW runs at 2e-5 or 2.5e-5. The negative high-rate boundary shows that the recipe remains
-sensitive to learning rate.
+This is a controlled recipe comparison rather than an equal-learning-rate optimizer
+isolation: AdamW retained its development-selected 1e-5 rate, while Muon was evaluated
+across an explicit learning rate grid. We therefore claim an optimizer-specific Muon-LoRA
+recipe, not that optimizer identity alone explains the full difference. The negative
+high-rate boundary shows that the recipe remains sensitive to learning rate.
 
 ### 4.3 Mechanism controls
 
@@ -182,6 +201,9 @@ calibration. It combines optimizer, representation-depth, and prediction-head di
 the complete evidence ladder appears above. Its branch and weight were selected on the
 released benchmark, so the headline is a completed-system result rather than an official
 leaderboard row.
+
+> **System extension.** Complementary Muon and AdamW errors enabled the completed
+> two-branch result of 0.590509 / 0.657425.
 
 ## 6. Compact Ablation Results
 
