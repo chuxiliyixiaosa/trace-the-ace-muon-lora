@@ -235,6 +235,9 @@ two-branch system at 0.590509 / 0.657425 on the released benchmark. The central 
 therefore not one fortunate blend, but a practical and audited optimization recipe that can
 transfer to other parameter-efficient classification systems.
 
+Code, frozen configurations, optimizer audits, aggregate results, and reproduction commands
+are available at https://github.com/chuxiliyixiaosa/trace-the-ace-muon-lora.
+
 ## References
 
 [1] A. Yang et al. "Qwen3 Technical Report." arXiv:2505.09388, 2025.
