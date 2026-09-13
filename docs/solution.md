@@ -193,13 +193,16 @@ standalone score: an intermediate layer can preserve complementary semantic info
 that becomes valuable in an ensemble. The gain combines optimizer, representation-depth,
 and prediction-head diversity.
 
-The complete improvement path is summarized below. The leaderboard row is the submitted
-score; the remaining rows use the same 10,508-row released-test audit. They should not be
-interpreted as additional leaderboard submissions.
+The complete improvement path is summarized below. The first three rows are official
+leaderboard references; our submitted row is shown separately. The remaining rows use the
+same 10,508-row released-test audit and should not be interpreted as additional leaderboard
+submissions.
 
 | Effective addition | Log Loss | AUROC | Main lesson |
 |---|---:|---:|---|
-| Finalized leaderboard winner | 0.59233 | 0.65088 | Official competition frontier |
+| Official #1, oleh | 0.59233 | 0.65088 | Finalized leaderboard reference |
+| Official #2, appleswim | 0.59241 | 0.64735 | Finalized leaderboard reference |
+| Official #3, Team Chicken | 0.59280 | 0.64737 | Finalized leaderboard reference |
 | Submitted final-token XGBoost + beta | 0.5966 | 0.6464 | Calibrated nonlinear head |
 | AdamW Qwen + Head-tail + robust Platt | 0.593883 | 0.650021 | Context allocation and calibration |
 | **Muon LR 2.5e-5 + robust Platt** | **0.591436** | **0.653200** | Single neural model beyond the finalized leaderboard frontier |
