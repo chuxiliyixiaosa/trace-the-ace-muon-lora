@@ -87,7 +87,7 @@ one epoch, LoRA rank256/alpha512, CE loss, AdamW at 1e-5, cosine decay with 3% w
 weight decay 0.1, bfloat16, SDPA, gradient checkpointing, and global batch four.
 
 For each example, we saved the final layer at the last non-padding token, a 2,560-
-dimensional vector denoted `h_final`, and the two classification logits. The final token is
+dimensional vector denoted `h_final`, and the two classification logits. The final-token state is
 a natural aggregation point in a causal Transformer because it follows both the objective
 and all retained dialogue evidence.
 
