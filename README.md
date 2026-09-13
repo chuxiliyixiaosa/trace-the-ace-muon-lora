@@ -19,12 +19,13 @@ fixed, an optimizer-specific learning rate of `2.5e-5` produced:
 The paired 2,000-repeat session bootstrap estimated a calibrated Log Loss gain
 of `0.002441`, with a 95% interval of `[0.000650, 0.004234]`.
 
-Under the same released-test evaluation, the Muon single-model score was lower
-than the [finalized leaderboard](https://platform.k12-ai-infrastructure.org/competitions/3/tutoring-outcomes/leaderboard/)
-winner's `0.59233` Log Loss, while its `0.65320` AUROC exceeded the winner's
-`0.65088`. This Muon run was evaluated after submissions closed and was not a
-leaderboard entry. The comparison establishes method capability, not an
-official rank.
+The Muon numbers use released public/A labels. The
+[finalized leaderboard](https://platform.k12-ai-infrastructure.org/competitions/3/tutoring-outcomes/leaderboard/)
+uses private/B labels, so its winning `0.59233` Log Loss is not directly
+comparable. Our best official submission moved from `0.59663` on A to `0.59449`
+on B, which makes stronger Muon B performance plausible but unmeasured. The
+Muon run was evaluated after submissions closed and was not a leaderboard
+entry.
 
 ## Why Muon inside LoRA?
 

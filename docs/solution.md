@@ -36,12 +36,12 @@ calibration before any new model was added: frozen robust-Platt Log Loss fell fr
 from **0.650021 to 0.653200**. The single model still uses one Qwen forward pass and a
 linear classification head at inference.
 
-This single-neural-model result also crossed the finalized competition frontier. Under the same
-released-test metric, its **0.591436 Log Loss** was lower than the winning leaderboard
-score of **0.59233**; its **0.653200 AUROC** also exceeded the winner's **0.65088** [7]. The
-Muon run was evaluated after model submissions closed and was not itself a leaderboard
-entry, so we use this comparison to establish method capability rather than claim an
-official rank.
+The Muon result uses released public/A labels, whereas the finalized leaderboard uses
+private/B labels, so it cannot be ranked directly against the winning **0.59233 / 0.65088**
+row [7]. Our best official submission moved from **0.59663 / 0.64465** on A to
+**0.59449 / 0.64985** on B. That direction makes stronger Muon B performance plausible,
+but no Muon B prediction exists. The run was evaluated after submissions closed and was
+not a leaderboard entry.
 
 We do not claim to have invented Muon for low-rank adaptation. Recent work confirms that
 LoRA's factorization creates a genuine geometric ambiguity and motivates specialized
@@ -158,8 +158,8 @@ AdamW, the best robust-Platt result improved Log Loss by 0.002447. A paired boot
 8,241 sessions estimated a mean gain of 0.002441 with 95% interval
 [0.000650, 0.004234]. The raw endpoint also improved, so the result is not created by
 post-processing. At the selected 2.5e-5 rate, the calibrated single-model score of
-0.591436 also beat the finalized leaderboard winner's 0.59233 under the released-test
-evaluation.
+0.591436 crossed the numeric level of the private/B winner on the public/A audit. Because
+the rows differ, this is evidence of headroom rather than a leaderboard comparison.
 
 This comparison establishes a useful recipe, not a pure causal estimate of optimizer
 identity: AdamW and Muon use their selected learning rates, and we do not have matched
@@ -193,21 +193,20 @@ standalone score: an intermediate layer can preserve complementary semantic info
 that becomes valuable in an ensemble. The gain combines optimizer, representation-depth,
 and prediction-head diversity.
 
-The complete improvement path is summarized below. The first three rows are official
-leaderboard references; our submitted row is shown separately. The remaining rows use the
-same 10,508-row released-test audit and should not be interpreted as additional leaderboard
-submissions.
+The complete improvement path is summarized below. Official B rows and public/A rows are
+separated explicitly; only values within one evaluation column are directly comparable.
 
-| Effective addition | Log Loss | AUROC | Main lesson |
-|---|---:|---:|---|
-| Official #1, oleh | 0.59233 | 0.65088 | Finalized leaderboard reference |
-| Official #2, appleswim | 0.59241 | 0.64735 | Finalized leaderboard reference |
-| Official #3, Team Chicken | 0.59280 | 0.64737 | Finalized leaderboard reference |
-| Submitted final-token XGBoost + beta | 0.5966 | 0.6464 | Calibrated nonlinear head |
-| AdamW Qwen + Head-tail + robust Platt | 0.593883 | 0.650021 | Context allocation and calibration |
-| **Muon LR 2.5e-5 + robust Platt** | **0.591436** | **0.653200** | Single neural model beyond the finalized leaderboard frontier |
-| AdamW + Muon LR 2e-5 beta blend | 0.591466 | 0.654527 | Optimizer diversity |
-| **Layer-28 XGBoost + Muon LR 2e-5** | **0.590509** | **0.657425** | Best observed two-branch system |
+| System | Evaluation | Log Loss | AUROC | Main lesson |
+|---|---|---:|---:|---|
+| Official #1, oleh | Private/B | 0.59233 | 0.65088 | Finalized leaderboard reference |
+| Official #2, appleswim | Private/B | 0.59241 | 0.64735 | Finalized leaderboard reference |
+| Official #3, Team Chicken | Private/B | 0.59280 | 0.64737 | Finalized leaderboard reference |
+| **Our official #4 submission** | **Private/B** | **0.59449** | **0.64985** | Official result |
+| Same official submission | Public/A | 0.59663 | 0.64465 | A was harder for this submitted model |
+| AdamW Qwen + Head-tail + robust Platt | Public/A audit | 0.593883 | 0.650021 | Context allocation and calibration |
+| **Muon LR 2.5e-5 + robust Platt** | **Public/A audit** | **0.591436** | **0.653200** | Best single neural public/A result |
+| AdamW + Muon LR 2e-5 beta blend | Public/A audit | 0.591466 | 0.654527 | Optimizer diversity |
+| **Layer-28 XGBoost + Muon LR 2e-5** | **Public/A audit** | **0.590509** | **0.657425** | Best observed two-branch result |
 
 These fusion weights were inspected on released labels, so we treat them as diagnostic
 evidence rather than independent model selection. The single model Muon result is the main

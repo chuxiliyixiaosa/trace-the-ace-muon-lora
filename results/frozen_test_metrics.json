@@ -1,11 +1,17 @@
 {
   "evaluation_rows": 10508,
   "evaluation_sessions": 8241,
-  "leaderboard_winner": {
-    "log_loss": 0.59233,
-    "auroc": 0.65088,
+  "official_private_leaderboard": {
+    "evaluation": "private_B",
+    "top_three": [
+      {"rank": 1, "participant": "oleh", "log_loss": 0.59233, "auroc": 0.65088},
+      {"rank": 2, "participant": "appleswim", "log_loss": 0.59241, "auroc": 0.64735},
+      {"rank": 3, "participant": "Team Chicken", "log_loss": 0.59280, "auroc": 0.64737}
+    ],
+    "our_rank_4": {"log_loss": 0.59449, "auroc": 0.64985},
     "source": "https://platform.k12-ai-infrastructure.org/competitions/3/tutoring-outcomes/leaderboard/"
   },
+  "our_official_submission_public_A": {"log_loss": 0.59663, "auroc": 0.64465},
   "adamw_lr1e-5": {
     "raw": {"log_loss": 0.6232499226, "auroc": 0.6500211437},
     "beta": {"log_loss": 0.5941811630, "auroc": 0.6500211437},
@@ -21,5 +27,6 @@
     "robust_platt_log_loss_gain_mean": 0.0024412617,
     "robust_platt_log_loss_gain_ci95": [0.0006501591, 0.0042338786]
   },
-  "disclosure": "The Muon run was evaluated after submissions closed and was not a leaderboard entry. Test labels were read only after predictions and their hash were frozen."
+  "comparability": "Muon metrics use released public/A labels; finalized leaderboard metrics use private/B labels and are not directly comparable.",
+  "disclosure": "The Muon run was evaluated after submissions closed and was not a leaderboard entry. Public labels were read only after predictions and their hash were frozen."
 }
