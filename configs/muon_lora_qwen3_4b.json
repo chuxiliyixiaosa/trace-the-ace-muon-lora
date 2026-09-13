@@ -1,0 +1,21 @@
+{
+  "model": "Qwen/Qwen3-4B-Instruct-2507",
+  "task_type": "seq_cls",
+  "optimizer": "muon",
+  "learning_rate": 0.000025,
+  "epochs": 1,
+  "max_length": 10240,
+  "training_truncation": "right",
+  "inference_context": "head-tail-35-65",
+  "lora_rank": 256,
+  "lora_alpha": 512,
+  "lora_dropout": 0.05,
+  "target_modules": "all-linear",
+  "global_batch_size": 4,
+  "world_size": 4,
+  "seed": 42,
+  "scheduler": "cosine",
+  "warmup_ratio": 0.03,
+  "weight_decay": 0.1,
+  "attention": "sdpa"
+}

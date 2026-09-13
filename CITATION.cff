@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If this repository helps your work, please cite the software and its upstream methods."
+title: "Trace the Ace: Matrix-Aware Muon-LoRA"
+type: software
+authors:
+  - name: xiaosa
+version: 0.1.0
+date-released: 2026-09-13
+license: MIT
+keywords:
+  - parameter-efficient fine-tuning
+  - Muon
+  - LoRA
+  - tutoring outcome prediction

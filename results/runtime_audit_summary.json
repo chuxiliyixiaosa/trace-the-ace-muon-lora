@@ -1,0 +1,18 @@
+{
+  "optimizer_class": "toy_train.Muon",
+  "muon_matrix_count": 505,
+  "adamw_matrix_count": 0,
+  "newton_schulz_steps": 5,
+  "momentum": 0.95,
+  "nesterov": true,
+  "weight_decay": 0.1,
+  "learning_rate": 0.000025,
+  "world_size": 4,
+  "per_device_batch_size": 1,
+  "gradient_accumulation_steps": 1,
+  "global_batch_size": 4,
+  "training_rows": 35072,
+  "training_steps": 8768,
+  "seed": 42,
+  "finite_training_complete": true
+}

@@ -1,0 +1,25 @@
+{
+  "evaluation_rows": 10508,
+  "evaluation_sessions": 8241,
+  "leaderboard_winner": {
+    "log_loss": 0.59233,
+    "auroc": 0.65088,
+    "source": "https://platform.k12-ai-infrastructure.org/competitions/3/tutoring-outcomes/leaderboard/"
+  },
+  "adamw_lr1e-5": {
+    "raw": {"log_loss": 0.6232499226, "auroc": 0.6500211437},
+    "beta": {"log_loss": 0.5941811630, "auroc": 0.6500211437},
+    "robust_platt": {"log_loss": 0.5938825240, "auroc": 0.6500211437}
+  },
+  "muon_lr2p5e-5": {
+    "raw": {"log_loss": 0.6164648564, "auroc": 0.6531996585},
+    "beta": {"log_loss": 0.5920529143, "auroc": 0.6531996585},
+    "robust_platt": {"log_loss": 0.5914355097, "auroc": 0.6531996585}
+  },
+  "paired_session_bootstrap": {
+    "repeats": 2000,
+    "robust_platt_log_loss_gain_mean": 0.0024412617,
+    "robust_platt_log_loss_gain_ci95": [0.0006501591, 0.0042338786]
+  },
+  "disclosure": "The Muon run was evaluated after submissions closed and was not a leaderboard entry. Test labels were read only after predictions and their hash were frozen."
+}
