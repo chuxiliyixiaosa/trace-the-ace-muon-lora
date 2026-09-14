@@ -40,11 +40,11 @@ Our work makes three contributions:
    hidden-state XGBoost, grouped beta calibration, and optimizer-diverse fusion jointly
    optimize Log Loss while preserving a practical inference path.
 
-![System architecture](figures/system_architecture.png)
+![End-to-end system architecture](figures/system_architecture.png)
 
-*Figure 2. The competition path used final-token XGBoost and grouped beta calibration. The
-completed research system combines an AdamW Layer-28 XGBoost branch with an audited
-Muon-LoRA classification branch.*
+*Figure 2. One transcript construction feeds two complete, auditable paths. The competition
+path uses final-token XGBoost and grouped beta calibration; the completed system combines
+an AdamW Layer-28 XGBoost branch with an audited Muon-LoRA classification branch.*
 
 The competition-time XGBoost system used Qwen3-4B's final valid-token hidden-state vector, five
 regularized XGBoost models, and cross-fitted beta calibration. It improved public/A Log
@@ -114,6 +114,12 @@ three consumed `[h_final; logits]`. Hyperparameters and ensemble size were selec
 session-grouped development results. The arithmetic ensemble added diversity without another
 Transformer forward pass.
 
+![Final-token XGBoost ensemble and calibration](figures/xgb-calibration.png)
+
+*Figure 3. A single Transformer pass supplies the final-token representation and logits to five
+regularized tree heads. Averaging controls variance; grouped beta calibration then reshapes
+probabilities without changing their ranking.*
+
 We then applied beta calibration [6] to the averaged probability:
 
 `p_cal = sigmoid(a log(p) - b log(1-p) + c)`.
@@ -146,6 +152,13 @@ LoRA on seven projections in each of 36 blocks produced 504 adapter matrices; th
 matrix was the 505th. A runtime callback enumerated every parameter and verified **505 Muon
 matrices, zero AdamW fallbacks**, four-GPU DDP, global batch four, finite losses/gradients,
 and the registered learning rate.
+
+![Evidence chain for Muon-LoRA](figures/optimizer-evidence.png)
+
+*Figure 4. The Muon-LoRA evidence chain connects matrix-momentum orthogonalization, a narrow
+learning rate optimum, paired session-bootstrap gains, and two falsifying split routing
+controls. Together these tests support a coordinated optimizer recipe rather than a
+head-only or post-processing explanation.*
 
 ### 4.2 An evidence ladder for Muon-LoRA
 
@@ -199,7 +212,7 @@ calibrated output correlated 0.8792 with an AdamW Layer-28 XGBoost branch. The s
 system uses 40% AdamW Layer-28 XGBoost and 60% Muon LR 2e-5 classification head after beta
 calibration. It combines optimizer, representation-depth, and prediction-head diversity;
 the complete evidence ladder appears above. Its branch and weight were selected on the
-released benchmark, so the headline is a completed-system result rather than an official
+released benchmark, so the headline is a completed system result rather than an official
 leaderboard row.
 
 > **System extension.** Complementary Muon and AdamW errors enabled the completed
