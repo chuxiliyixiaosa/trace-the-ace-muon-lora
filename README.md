@@ -4,6 +4,8 @@ Reproducible code for our K-12 AI Infrastructure **Trace the Ace** solution and
 the optimizer study that followed it. The task predicts whether a student will
 answer correctly after a long tutoring dialogue.
 
+**[Read the solution report (PDF)](docs/solution.pdf)**
+
 ## Main result
 
 We replaced AdamW with Muon for every trainable LoRA factor and the sequence
