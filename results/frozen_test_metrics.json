@@ -40,6 +40,13 @@
     "auroc": 0.657425,
     "evaluation": "released_labeled_benchmark"
   },
+  "two_branch_system_muon_lr2p5e5": {
+    "composition": "0.40 AdamW Layer-28 XGBoost beta + 0.60 Muon LR2.5e-5 classification-head beta",
+    "log_loss": 0.5901359819380726,
+    "auroc": 0.6575219559633176,
+    "evaluation": "released_public_A",
+    "source": "muon_lr25_layer28_fusion_ablation.json"
+  },
   "paired_session_bootstrap": {
     "repeats": 2000,
     "robust_platt_log_loss_gain_mean": 0.0024412617,

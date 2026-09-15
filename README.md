@@ -23,7 +23,7 @@ of `0.002441`, with a 95% interval of `[0.000650, 0.004234]`.
 
 The Muon numbers use released public/A labels. The
 [finalized leaderboard](https://platform.k12-ai-infrastructure.org/competitions/3/tutoring-outcomes/leaderboard/)
-uses private/B labels, so its winning `0.59233` Log Loss is not directly
+uses private/B labels, so its first-place `0.59233` Log Loss is not directly
 comparable. Our best official submission moved from `0.59663` on A to `0.59449`
 on B, which makes stronger Muon B performance plausible but unmeasured. The
 Muon run was evaluated after submissions closed and was not a leaderboard
@@ -37,17 +37,17 @@ matrix momentum update with Newton-Schulz iterations before applying it. We
 used Muon for **505 trainable matrices and zero AdamW fallback matrices**, and
 saved the complete runtime membership audit beside the checkpoint.
 
-The gain was not explained by the final score matrix alone. Opposite routing
-controls, Muon adapters with an AdamW head and AdamW adapters with a Muon head,
-both regressed. The useful recipe required coordinated optimization of the
-adapted representation and task head. The learning-rate response was also
+Opposite routing controls, Muon adapters with an AdamW head and AdamW adapters
+with a Muon head, regressed against their respective references. These controls
+used different splits and calibration mappings, so they do not establish a
+matched factorial or causal explanation. The learning-rate response was also
 non-monotonic: `2.5e-5` was best in our grid, while `3e-5` and `1e-4` failed.
 
 ## Repository layout
 
 ```text
 configs/                         Frozen training recipe
-docs/solution.md                 Four-page solution narrative
+docs/solution.pdf                Final solution report
 results/frozen_test_metrics.json Aggregate results only
 src/trace_ace/data.py            Competition CSV and transcript preparation
 src/trace_ace/headtail.py        35/65 long-context allocation
@@ -127,15 +127,38 @@ trace-ace-predict \
   --model Qwen/Qwen3-4B-Instruct-2507 \
   --adapter checkpoints/qwen3-4b-muon-lora/checkpoint-8768 \
   --jsonl data/test_headtail.jsonl \
-  --output predictions/raw.csv \
-  --features-output outputs/test_features.npz
+  --calibration robust-platt \
+  --output predictions/muon.csv
 
 trace-ace-evaluate \
-  --predictions predictions/raw.csv \
+  --predictions predictions/muon.csv \
+  --probability-column raw_probability \
   --labels data/test_labels.csv
 ```
 
-The optional XGBoost stage consumes the exported final-token hidden vectors.
+The prediction CSV retains `raw_probability` and logits; `probability` contains
+the selected mapping (default: raw). The evaluator expects raw probabilities
+and reports raw, beta, and robust-Platt metrics, so the example explicitly
+selects `raw_probability` to avoid applying calibration twice.
+
+For the optional XGBoost branch, export features from the **AdamW checkpoint**:
+
+```bash
+trace-ace-predict \
+  --model Qwen/Qwen3-4B-Instruct-2507 \
+  --adapter checkpoints/qwen3-4b-adamw-lora/checkpoint-8768 \
+  --jsonl data/test_headtail.jsonl \
+  --hidden-layer 28 \
+  --output predictions/adamw_raw.csv \
+  --features-output outputs/test_features.npz
+```
+
+HF hidden-state index 0 is the embedding output; index 28 is block 28's output,
+not the final block. Export training features with the same checkpoint, layer,
+and preprocessing. The NPZ records `hidden_layer`; prediction metadata records
+the model, adapter, calibration mode, and input length limit.
+
+The optional XGBoost stage consumes these final-token, Layer-28 hidden vectors.
 Its five configurations and beta mapping were selected on grouped development
 predictions and are checked in as frozen constants:
 
@@ -164,8 +187,9 @@ calibrators exclusively from grouped out-of-fold predictions.
 
 - The Muon and AdamW comparison uses each optimizer's selected learning rate;
   it is a recipe comparison, not an equal-learning-rate causal estimate.
-- Released labels were read only after Muon predictions and their SHA-256 hash
-  had been frozen.
+- Each run froze predictions and hashes before scoring; the broader learning-rate
+  and variant search used earlier public/A feedback. Bootstrap intervals condition
+  on fixed predictions, not the model-selection process or training randomness.
 - No released test rows, labels, predictions, or model weights are included.
 - The direct Hugging Face predictor is a portable reference. For exact
   competition-runtime parity, preserve the ms-swift `qwen3_nothinking` template
@@ -176,4 +200,4 @@ calibrators exclusively from grouped out-of-fold predictions.
 This repository is released under the MIT License. Qwen, ms-swift, Moonlight,
 Muon, LoRA, XGBoost, and the competition dataset retain their own licenses.
 Please cite the corresponding upstream projects and papers listed in
-[`docs/solution.md`](docs/solution.md).
+[`docs/solution.pdf`](docs/solution.pdf).

@@ -1,0 +1,34 @@
+{
+  "experiment": "fixed_weight_muon_lr25_layer28_xgb_fusion_ablation",
+  "rows": 10508,
+  "sessions": 8241,
+  "formula": "0.4 * adamw_layer28_xgb_beta + 0.6 * muon_lr2p5e5_head_beta",
+  "weight_selection": "The 0.4/0.6 weight was held fixed from the prior LR2e-5 fusion; a descriptive 0.05 grid retained 0.60 as the minimum.",
+  "metrics": {
+    "log_loss": 0.5901359819380726,
+    "auroc": 0.6575219559633176
+  },
+  "comparison_to_lr2e5_fixed_fusion": {
+    "reference_log_loss": 0.5905092699445191,
+    "reference_auroc": 0.657425288208876,
+    "log_loss_gain": 0.00037328800644653715,
+    "session_bootstrap_2000": {
+      "seed": 20260915,
+      "mean_gain": 0.0003786780377020627,
+      "ci95": [-0.000697878305923842, 0.0014251243848224088]
+    }
+  },
+  "comparison_to_muon_lr2p5e5_beta_head": {
+    "reference_log_loss": 0.592052914322794,
+    "log_loss_gain": 0.0019169323847214017,
+    "session_bootstrap_2000": {
+      "seed": 20260915,
+      "mean_gain": 0.0018824481835374262,
+      "ci95": [0.0007139255935437981, 0.003063140866421136]
+    }
+  },
+  "input_sha256": {
+    "aligned_adamw_xgb_and_muon_lr2e5": "3D224780E76388A2683EF05634A22017924699B4DDBCE7263FF5A897D8AD2F78",
+    "muon_lr2p5e5_predictions": "EAFC2850BFBB025692FABA812966DD963A1B2A9154A0869048640271EEA686FD"
+  }
+}
